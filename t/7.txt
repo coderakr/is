@@ -1,0 +1,38 @@
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+public class MD5Example {
+
+    public static String getMD5(String input) {
+        try {
+            // Create MessageDigest instance for MD5
+            MessageDigest md = MessageDigest.getInstance("MD5");
+
+            // Add input bytes to digest
+            md.update(input.getBytes());
+
+            // Get the hash's bytes
+            byte[] digest = md.digest();
+
+            // Convert bytes to hexadecimal format
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : digest) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+
+            return hexString.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void main(String[] args) {
+        String text = "Hello World";
+        String md5Hash = getMD5(text);
+
+        System.out.println("MD5 hash: " + md5Hash);
+    }
+}

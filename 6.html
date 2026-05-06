@@ -1,0 +1,82 @@
+<!-- Implement the different Hellman Key Exchange mechanism using HTML and JavaScript.
+Consider the end user as one of the parties (Alice) and the JavaScript application as other party
+(bob). -->
+
+<!doctype html>
+<html>
+  <head>
+    <title>Diffie-Hellman Key Exchange</title>
+  </head>
+  <body>
+    <h2>Diffie-Hellman Key Exchange</h2>
+
+    <label>Prime Number (p): </label>
+    <input type="number" id="p" /><br /><br />
+
+    <label>Primitive Root (g): </label>
+    <input type="number" id="g" /><br /><br />
+
+    <label>Alice Private Key (a): </label>
+    <input type="number" id="a" /><br /><br />
+
+    <button onclick="generateKeys()">Generate Keys</button>
+
+    <h3>Results:</h3>
+    <p id="alicePublic"></p>
+    <p id="bobPrivate"></p>
+    <p id="bobPublic"></p>
+    <p id="aliceSecret"></p>
+    <p id="bobSecret"></p>
+
+    <script>
+      // Function to compute (base^exp) % mod
+      function modExp(base, exp, mod) {
+        let result = 1;
+        base = base % mod;
+
+        while (exp > 0) {
+          if (exp % 2 === 1) result = (result * base) % mod;
+
+          exp = Math.floor(exp / 2);
+          base = (base * base) % mod;
+        }
+        return result;
+      }
+
+      function generateKeys() {
+        let p = parseInt(document.getElementById("p").value);
+        let g = parseInt(document.getElementById("g").value);
+        let a = parseInt(document.getElementById("a").value);
+
+        // Bob's private key (random)
+        let b = Math.floor(Math.random() * 10) + 1;
+
+        // Public keys
+        let A = modExp(g, a, p); // Alice
+        let B = modExp(g, b, p); // Bob
+
+        // Shared secrets
+        let aliceSecret = modExp(B, a, p);
+        let bobSecret = modExp(A, b, p);
+
+        // Display results
+        document.getElementById("alicePublic").innerHTML =
+          "Alice Public Key (A): " + A;
+        document.getElementById("bobPrivate").innerHTML =
+          "Bob Private Key (b): " + b;
+        document.getElementById("bobPublic").innerHTML =
+          "Bob Public Key (B): " + B;
+        document.getElementById("aliceSecret").innerHTML =
+          "Alice Secret Key: " + aliceSecret;
+        document.getElementById("bobSecret").innerHTML =
+          "Bob Secret Key: " + bobSecret;
+      }
+    </script>
+  </body>
+</html>
+
+<!-- 
+INPUT:-
+p = 23
+g = 5
+a = 6 -->
